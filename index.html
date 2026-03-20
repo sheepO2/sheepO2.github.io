@@ -109,12 +109,50 @@
 
 
 <body>
-  <!-- 文件路径: source/_inject/loader.ejs -->
+  
 <div id="page-loader">
   <div class="spinner"></div>
-  <p>loading</p>
-  <!-- 也可以放一个简单的文字，例如：<p>正在加载精彩内容...</p> -->
 </div>
+
+<style>
+  /* 样式代码保持不变 */
+  #page-loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #fff;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+  }
+  #page-loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px; height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<script>
+  function hideLoader() {
+    var loader = document.getElementById('page-loader');
+    if (loader) loader.classList.add('hidden');
+  }
+  window.addEventListener('load', hideLoader);
+  setTimeout(hideLoader, 5000);
+</script>
+
 
   <header>
     
@@ -503,6 +541,37 @@
 
   
   
+  <!-- 显示当前时间的代码 -->
+<div style="color: #666; font-size: 14px; margin-top: 5px;">
+    <span id="footer-time"></span>
+</div>
+
+<script>
+    function updateTime() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = now.getMonth() + 1;
+        var day = now.getDate();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        
+        // 格式化时间，补零操作
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+        hour = hour < 10 ? '0' + hour : hour;
+        minute = minute < 10 ? '0' + minute : minute;
+        second = second < 10 ? '0' + second : second;
+        
+        var timeString = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+        document.getElementById('footer-time').innerHTML = '当前时间：' + timeString;
+    }
+    
+    // 页面加载时立即执行一次
+    updateTime();
+    // 每秒更新一次时间
+    setInterval(updateTime, 1000);
+</script>
 </div>
 
   </footer>

@@ -109,12 +109,7 @@
 
 
 <body>
-  <!-- 文件路径: source/_inject/loader.ejs -->
-<div id="page-loader">
-  <div class="spinner"></div>
-  <p>loading</p>
-  <!-- 也可以放一个简单的文字，例如：<p>正在加载精彩内容...</p> -->
-</div>
+  
 
   <header>
     
@@ -430,6 +425,37 @@
 
   
   
+  <!-- 显示当前时间的代码 -->
+<div style="color: #666; font-size: 14px; margin-top: 5px;">
+    <span id="footer-time"></span>
+</div>
+
+<script>
+    function updateTime() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = now.getMonth() + 1;
+        var day = now.getDate();
+        var hour = now.getHours();
+        var minute = now.getMinutes();
+        var second = now.getSeconds();
+        
+        // 格式化时间，补零操作
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+        hour = hour < 10 ? '0' + hour : hour;
+        minute = minute < 10 ? '0' + minute : minute;
+        second = second < 10 ? '0' + second : second;
+        
+        var timeString = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+        document.getElementById('footer-time').innerHTML = '当前时间：' + timeString;
+    }
+    
+    // 页面加载时立即执行一次
+    updateTime();
+    // 每秒更新一次时间
+    setInterval(updateTime, 1000);
+</script>
 </div>
 
   </footer>
