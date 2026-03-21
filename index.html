@@ -725,65 +725,6 @@
 <script  src="/js/boot.js" ></script>
 
 
-  
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const targets = [
-          document.querySelector('.markdown-body'),
-          document.querySelector('.post'),
-          document.querySelector('.article'),
-          document.querySelector('#board'),
-        ];
-
-        const target = targets.find(el => el);
-
-        if (target) {
-          const div = document.createElement('div');
-          div.style.margin = "20px 0";
-
-          div.innerHTML = `
-            <!-- 🎵 播放器 -->
-            <meting-js
-              server="netease"
-              type="playlist"
-              id="13942358671"
-              fixed="false"
-              autoplay="false"
-              order="random"
-              preload="auto"
-              volume="0.7">
-            </meting-js>
-
-            <!-- 💬 评论区 -->
-            <div id="giscus-container" style="margin-top:30px;"></div>
-          `;
-
-          target.prepend(div);
-
-          // 👇 动态加载 Giscus
-          const script = document.createElement("script");
-          script.src = "https://giscus.app/client.js";
-          script.setAttribute("data-repo", "sheepO2/sheepO2.github.io");
-          script.setAttribute("data-repo-id", "R_kgDORpKDVg");
-          script.setAttribute("data-category", "General");
-          script.setAttribute("data-category-id", "DIC_kwDORpKDVs4C41AR");
-          script.setAttribute("data-mapping", "pathname");
-          script.setAttribute("data-strict", "0");
-          script.setAttribute("data-reactions-enabled", "1");
-          script.setAttribute("data-emit-metadata", "0");
-          script.setAttribute("data-input-position", "top");
-          script.setAttribute("data-theme", "preferred_color_scheme");
-          script.setAttribute("data-lang", "zh-CN");
-          script.crossOrigin = "anonymous";
-          script.async = true;
-
-          document.getElementById("giscus-container").appendChild(script);
-
-        } else {
-          console.warn("没找到文章容器");
-        }
-      });
-    </script>
   <script>
 (function() {
   const loader = document.getElementById('page-loader');
@@ -850,6 +791,63 @@
   setTimeout(completeLoading, 5000);
 })();
 </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+
+        // 🎯 只在 /music/ 页面执行
+        if (!location.pathname.startsWith('/music')) return;
+
+        const targets = [
+          document.querySelector('.markdown-body'),
+          document.querySelector('.post'),
+          document.querySelector('.article'),
+          document.querySelector('#board'),
+        ];
+
+        const target = targets.find(el => el);
+
+        if (target) {
+          const div = document.createElement('div');
+          div.style.margin = "20px 0";
+
+          div.innerHTML = `
+            <!-- 🎵 播放器 -->
+            <meting-js
+              server="netease"
+              type="playlist"
+              id="13942358671"
+              fixed="false"
+              autoplay="false"
+              order="random"
+              preload="auto"
+              volume="0.7">
+            </meting-js>
+
+            <!-- 💬 评论区 -->
+            <div id="giscus-container" style="margin-top:30px;"></div>
+          `;
+
+          target.prepend(div);
+
+          // 👇 加载 Giscus
+          const script = document.createElement("script");
+          script.src = "https://giscus.app/client.js";
+          script.setAttribute("data-repo", "sheepO2/sheepO2.github.io");
+          script.setAttribute("data-repo-id", "R_kgDORpKDVg");
+          script.setAttribute("data-category", "General");
+          script.setAttribute("data-category-id", "DIC_kwDORpKDVs4C41AR");
+          script.setAttribute("data-mapping", "pathname");
+          script.setAttribute("data-theme", "preferred_color_scheme");
+          script.setAttribute("data-lang", "zh-CN");
+          script.crossOrigin = "anonymous";
+          script.async = true;
+
+          document.getElementById("giscus-container").appendChild(script);
+
+        }
+      });
+    </script>
+  
 
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
