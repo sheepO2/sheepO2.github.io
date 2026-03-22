@@ -71,6 +71,8 @@
 
   
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/custom-music.css">
 
 
 
@@ -116,6 +118,58 @@
 
 
 
+  
+    <script>
+      (function () {
+        const images = [
+          '/img/random/1.png',
+          '/img/random/2.png',
+          '/img/random/3.png',
+          '/img/random/4.png',
+          '/img/random/5.png',
+          '/img/random/6.png',
+          '/img/random/7.png',
+          '/img/random/default.png'
+        ];
+
+        let bg = sessionStorage.getItem('random-bg');
+
+        if (!bg) {
+          bg = images[Math.floor(Math.random() * images.length)];
+          sessionStorage.setItem('random-bg', bg);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+          const banner =
+            document.querySelector('#banner') ||
+            document.querySelector('.banner') ||
+            document.querySelector('.banner-img');
+
+          if (banner) {
+            // 🎯 有 banner → 改 banner
+            banner.style.setProperty(
+              'background-image',
+              "url('" + bg + "')",
+              'important'
+            );
+            banner.style.backgroundSize = "cover";
+            banner.style.backgroundPosition = "center";
+          } else {
+            // 🎯 没 banner → 改 body（兜底）
+            document.body.style.setProperty(
+              'background-image',
+              "url('" + bg + "')",
+              'important'
+            );
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+            document.body.style.backgroundAttachment = "fixed";
+          }
+
+        });
+      })();
+    </script>
   <style>
 #page-loader {
   position: fixed;
@@ -202,51 +256,6 @@
   font-family: 'JetBrains Mono', monospace, system-ui;
 }
 </style>
-    <script>
-      (function () {
-        const images = [
-          '/img/random/1.png',
-          '/img/random/2.png',
-          '/img/random/3.png',
-          '/img/random/4.png',
-          '/img/random/5.png',
-          '/img/random/6.png',
-          '/img/random/7.png',
-          '/img/random/default.png'
-        ];
-
-        let bg = sessionStorage.getItem('random-bg');
-
-        if (!bg) {
-          bg = images[Math.floor(Math.random() * images.length)];
-          sessionStorage.setItem('random-bg', bg);
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-
-          // 🎯 精确找 banner（多版本兼容）
-          const el =
-            document.querySelector('#banner') ||
-            document.querySelector('.banner') ||
-            document.querySelector('.banner-img') ||
-            document.querySelector('header');
-
-          if (el) {
-            el.style.setProperty(
-              'background-image',
-              "url('" + bg + "')",
-              'important'
-            );
-            el.style.backgroundSize = "cover";
-            el.style.backgroundPosition = "center";
-          } else {
-            console.error("❌ banner没找到，去F12看真实类名");
-          }
-
-        });
-      })();
-    </script>
-  
 <meta name="generator" content="Hexo 8.1.1"></head>
 
 
@@ -873,6 +882,7 @@
   
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<script src="/js/mouse.js"></script>
 
 
 
@@ -938,6 +948,9 @@
         }
       });
     </script>
+  
+    <div id="cursor"></div>
+    <div id="cursor-trail"></div>
   <script>
 (function() {
   const loader = document.getElementById('page-loader');

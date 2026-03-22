@@ -1,0 +1,33 @@
+body {
+  cursor: none;
+}
+
+#cursor {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: rgba(25, 65, 174, 0.8);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(44, 51, 69, 0.5);
+}
+
+#cursor-trail {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(105, 152, 161, 0.763);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: all 0.15s ease;
+}
+
+*,
+*::before,
+*::after {
+  cursor: none !important;
+}
