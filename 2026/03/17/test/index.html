@@ -205,6 +205,51 @@
   font-family: 'JetBrains Mono', monospace, system-ui;
 }
 </style>
+    <script>
+      (function () {
+        const images = [
+          '/img/random/1.png',
+          '/img/random/2.png',
+          '/img/random/3.png',
+          '/img/random/4.png',
+          '/img/random/5.png',
+          '/img/random/6.png',
+          '/img/random/7.png',
+          '/img/random/default.png'
+        ];
+
+        let bg = sessionStorage.getItem('random-bg');
+
+        if (!bg) {
+          bg = images[Math.floor(Math.random() * images.length)];
+          sessionStorage.setItem('random-bg', bg);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+          // 🎯 精确找 banner（多版本兼容）
+          const el =
+            document.querySelector('#banner') ||
+            document.querySelector('.banner') ||
+            document.querySelector('.banner-img') ||
+            document.querySelector('header');
+
+          if (el) {
+            el.style.setProperty(
+              'background-image',
+              "url('" + bg + "')",
+              'important'
+            );
+            el.style.backgroundSize = "cover";
+            el.style.backgroundPosition = "center";
+          } else {
+            console.error("❌ banner没找到，去F12看真实类名");
+          }
+
+        });
+      })();
+    </script>
+  
 <meta name="generator" content="Hexo 8.1.1"></head>
 
 
