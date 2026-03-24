@@ -166,14 +166,20 @@
 <script>
 (function() {
   const storageKey = 'blog_visit_count';
+  const sessionKey = 'blog_visit_counted';
   let visitCount = localStorage.getItem(storageKey);
-  
+
   if (visitCount === null) {
-    visitCount = 1;
+    visitCount = 0;
   } else {
-    visitCount = parseInt(visitCount, 10) + 1;
+    visitCount = parseInt(visitCount, 10) || 0;
   }
-  
+
+  if (!sessionStorage.getItem(sessionKey)) {
+    visitCount += 1;
+    sessionStorage.setItem(sessionKey, 'true');
+  }
+
   localStorage.setItem(storageKey, visitCount);
   window.__blogVisitCount = visitCount;
 })();
