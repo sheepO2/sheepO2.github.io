@@ -16,17 +16,17 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="sheep">
+  <meta name="author" content="sheepO2">
   <meta name="keywords" content="">
   
     <meta name="description" content="first test blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="标签 - test">
-<meta property="og:url" content="http://example.com/tags/test/index.html">
+<meta property="og:url" content="https://sheepo2.github.io/tags/test/">
 <meta property="og:site_name" content="sheepO2">
 <meta property="og:description" content="first test blog">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="sheep">
+<meta property="article:author" content="sheepO2">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -64,14 +64,13 @@
   
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <link rel="stylesheet" href="/css/custom.css">
-<link rel="stylesheet" href="/css/custom-music.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":"https://cloud.umami.is/script.js","website_id":"28a27955-0e23-4f3f-b084-846ec0b3c5b8","domains":"sheepo2.github.io","start_time":"2026-03-18T00:00:00.000Z","token":"api_eUniskXCF1SWCsj4VIrDVtoXPmSzA9LI","api_server":"https://api.umami.is"}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"sheepo2.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":"https://cloud.umami.is/script.js","website_id":"28a27955-0e23-4f3f-b084-846ec0b3c5b8","domains":"sheepo2.github.io","start_time":"2026-03-18T00:00:00.000Z","token":"api_eUniskXCF1SWCsj4VIrDVtoXPmSzA9LI","api_server":"https://api.umami.is"}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -162,108 +161,11 @@
         });
       })();
     </script>
-  <style>
-#page-loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(#2e6ae2 40%, #3a80cb 70%, #7a9bd5ce 100%) !important;
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.5s ease;
-}
-
-#page-loader.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.progress-container {
-  width: 80%;
-  max-width: 320px;
-  text-align: center;
-  backdrop-filter: blur(2px);
-}
-
-.progress-bar {
-  width: 100%;
-  height: 6px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-}
-
-.progress-fill {
-  width: 0%;
-  height: 100%;
-  background: linear-gradient(90deg, #38bdf8, #818cf8, #38bdf8);
-  background-size: 200% auto;
-  border-radius: 10px;
-  transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 12px #38bdf8;
-  animation: shimmer 1.2s linear infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 0% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.progress-info {
-  margin-top: 16px;
-  font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', sans-serif;
-  font-size: 14px;
-  letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 0 6px #38bdf8;
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.loading-text {
-  font-weight: 400;
-  opacity: 0.9;
-}
-
-.percent {
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 2px 8px;
-  border-radius: 20px;
-  backdrop-filter: blur(4px);
-  font-size: 13px;
-  letter-spacing: 0;
-  font-family: 'JetBrains Mono', monospace, system-ui;
-}
-</style>
+  
 <meta name="generator" content="Hexo 8.1.1"></head>
 
 
 <body>
-  
-<div id="page-loader">
-  <div class="progress-container">
-    <div class="progress-bar">
-      <div class="progress-fill"></div>
-    </div>
-    <div class="progress-info">
-      <span class="loading-text">Loading</span>
-      <span class="percent" id="loading-percent">0%</span>
-    </div>
-  </div>
-</div>
   
 
   <header>
@@ -662,6 +564,7 @@
     updateTime();
     // 每秒更新一次时间
     setInterval(updateTime, 1000);
+    
 </script>
 </div>
 
@@ -733,6 +636,7 @@
 <script  src="/js/boot.js" ></script>
 
 
+
   
     <script>
       document.addEventListener("DOMContentLoaded", function () {
@@ -793,72 +697,7 @@
   
     <div id="cursor"></div>
     <div id="cursor-trail"></div>
-  <script>
-(function() {
-  const loader = document.getElementById('page-loader');
-  if (!loader) return;
-
-  const fill = loader.querySelector('.progress-fill');
-  const percentSpan = document.getElementById('loading-percent');
-  if (!fill || !percentSpan) return;
-
-  let completed = false;
-  let currentWidth = 0;
-  let progressInterval = null;
-
-  function setProgress(widthPercent) {
-    if (completed) return;
-    widthPercent = Math.min(widthPercent, 99);
-    currentWidth = widthPercent;
-    fill.style.width = currentWidth + '%';
-    percentSpan.innerText = Math.floor(currentWidth) + '%';
-  }
-
-  function updateProgress() {
-    if (completed) return;
-
-    let step = 0;
-    if (currentWidth < 70) {
-      step = Math.floor(Math.random() * 5) + 4;
-    } else if (currentWidth < 90) {
-      step = Math.floor(Math.random() * 3) + 2;
-    } else if (currentWidth < 98) {
-      step = 1;
-    } else {
-      return;
-    }
-
-    let newWidth = Math.min(currentWidth + step, 99);
-    if (newWidth !== currentWidth) {
-      setProgress(newWidth);
-    }
-  }
-
-  function completeLoading() {
-    if (completed) return;
-    completed = true;
-
-    if (progressInterval) {
-      clearInterval(progressInterval);
-      progressInterval = null;
-    }
-
-    if (fill) fill.style.width = '100%';
-    if (percentSpan) percentSpan.innerText = '100%';
-
-    setTimeout(() => {
-      if (loader) loader.classList.add('hidden');
-    }, 320);
-  }
-
-  progressInterval = setInterval(() => {
-    updateProgress();
-  }, 120);
-
-  window.addEventListener('load', completeLoading);
-  setTimeout(completeLoading, 5000);
-})();
-</script>
+  
 
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
