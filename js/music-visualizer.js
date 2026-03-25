@@ -19,6 +19,30 @@ window.addEventListener('DOMContentLoaded', function() {
   var lastCurrentTime = 0;
   var skipCooldown = false;
   var silentTicks = 0;
+  var skipGraceUntil = 0;
+
+  function now() {
+    return Date.now();
+  }
+
+  function extendSkipGrace(ms) {
+    skipGraceUntil = Math.max(skipGraceUntil, now() + ms);
+  }
+
+  function resetAutoSkipCounters() {
+    stalledTicks = 0;
+    lastCurrentTime = connectedAudio ? connectedAudio.currentTime : 0;
+    silentTicks = 0;
+  }
+
+  function shouldSkipDetectionPause(audio) {
+    if (!audio) return true;
+    if (now() < skipGraceUntil) return true;
+    if (audio.paused || audio.ended) return true;
+    if (audio.seeking) return true;
+    if (audio.readyState < 2) return true;
+    return false;
+  }
 
   function createVisualizer() {
     var playerWrap = document.getElementById('music-player-wrap');
@@ -162,7 +186,7 @@ window.addEventListener('DOMContentLoaded', function() {
       values.push(avg);
     }
 
-    if (!connectedAudio.paused && connectedAudio.currentTime > 1.5) {
+    if (!shouldSkipDetectionPause(connectedAudio) && connectedAudio.currentTime > 1.5) {
       if (totalEnergy < 30) {
         silentTicks += 1;
       } else {
@@ -242,6 +266,7 @@ window.addEventListener('DOMContentLoaded', function() {
     boundAudio = audio;
 
     audio.addEventListener('play', function() {
+      extendSkipGrace(2500);
       var title = getCurrentTitle();
       setStatus(title ? 'Now playing: ' + title : 'Now playing');
       ensureAudioContextResumed();
@@ -251,21 +276,48 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     audio.addEventListener('pause', function() {
+      extendSkipGrace(4000);
+      resetAutoSkipCounters();
       setStatus('Paused');
       setPlayingState(false);
       resetBars();
     });
 
     audio.addEventListener('ended', function() {
+      extendSkipGrace(2500);
+      resetAutoSkipCounters();
       setStatus('Playback ended');
       setPlayingState(false);
       resetBars();
     });
 
     audio.addEventListener('loadedmetadata', function() {
-      stalledTicks = 0;
-      lastCurrentTime = 0;
-      silentTicks = 0;
+      extendSkipGrace(4000);
+      resetAutoSkipCounters();
+    });
+
+    audio.addEventListener('loadstart', function() {
+      extendSkipGrace(5000);
+      resetAutoSkipCounters();
+      setStatus('Loading track...');
+    });
+
+    audio.addEventListener('waiting', function() {
+      extendSkipGrace(4000);
+    });
+
+    audio.addEventListener('seeking', function() {
+      extendSkipGrace(4000);
+      resetAutoSkipCounters();
+    });
+
+    audio.addEventListener('seeked', function() {
+      extendSkipGrace(2500);
+      resetAutoSkipCounters();
+    });
+
+    audio.addEventListener('canplay', function() {
+      extendSkipGrace(2000);
     });
 
     audio.addEventListener('error', function() {
@@ -296,9 +348,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
     window.setTimeout(function() {
       skipCooldown = false;
-      stalledTicks = 0;
-      lastCurrentTime = 0;
-      silentTicks = 0;
+      extendSkipGrace(2500);
+      resetAutoSkipCounters();
     }, 2500);
   }
 
@@ -378,7 +429,7 @@ window.addEventListener('DOMContentLoaded', function() {
     if (audio) {
       connectRealSpectrum(audio);
 
-      if (!audio.paused && !audio.ended) {
+      if (!shouldSkipDetectionPause(audio)) {
         if (audio.currentTime === lastCurrentTime && audio.readyState < 3) {
           stalledTicks += 1;
         } else if (Math.abs(audio.currentTime - lastCurrentTime) < 0.01 && audio.currentTime === 0 && audio.networkState === 2) {
@@ -395,9 +446,7 @@ window.addEventListener('DOMContentLoaded', function() {
           return;
         }
       } else {
-        stalledTicks = 0;
-        lastCurrentTime = audio.currentTime;
-        silentTicks = 0;
+        resetAutoSkipCounters();
       }
 
       if (!audio.paused) {
