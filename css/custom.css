@@ -130,8 +130,8 @@ body {
 }
 
 .music-footer-visualizer.is-fallback .music-footer-visualizer__bar {
-  background: linear-gradient(180deg, rgba(255, 220, 145, 0.98), rgba(255, 170, 84, 0.86) 55%, rgba(107, 68, 33, 0.34));
-  box-shadow: 0 0 16px rgba(255, 175, 92, 0.24);
+  background: linear-gradient(180deg, rgba(112, 122, 191, 0.98), rgba(78, 125, 205, 0.86) 55%, rgba(26, 83, 92, 0.34));
+  box-shadow: 0 0 16px rgba(84, 117, 188, 0.2);
 }
 
 .music-footer-visualizer__glow {
