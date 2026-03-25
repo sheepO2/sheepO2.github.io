@@ -655,23 +655,14 @@
         const target = targets.find(Boolean);
         if (!target || document.getElementById('music-page-shell')) return;
 
+        const customMusicApi = "https://sheepo2-meting-api.sheep-o2.workers.dev/api/meting?server=:server&type=:type&id=:id&r=:r";
         const shell = document.createElement('section');
         shell.id = 'music-page-shell';
         shell.style.margin = '20px 0';
 
         shell.innerHTML = `
           <div id="music-player-wrap">
-            <meting-js
-              api="https://sheepo2-meting-api.sheep-o2.workers.dev/api/meting?server=:server&type=:type&id=:id&r=:r"
-              server="netease"
-              type="playlist"
-              id="13942358671"
-              fixed="false"
-              autoplay="false"
-              order="random"
-              preload="auto"
-              volume="0.7">
-            </meting-js>
+            <div id="music-player-placeholder">Loading music player...</div>
           </div>
 
           <div id="giscus-container" style="margin-top:30px;"></div>
@@ -691,7 +682,63 @@
         giscusScript.crossOrigin = 'anonymous';
         giscusScript.async = true;
         document.getElementById('giscus-container').appendChild(giscusScript);
+
+        initMusicPlayer(customMusicApi);
       });
+
+      function buildMetingMarkup(api) {
+        const apiAttr = api ? ' api="' + api + '"' : '';
+        return `
+          <meting-js${apiAttr}
+            server="netease"
+            type="playlist"
+            id="13942358671"
+            fixed="false"
+            autoplay="false"
+            order="random"
+            preload="auto"
+            volume="0.7">
+          </meting-js>
+        `;
+      }
+
+      function renderMetingPlayer(api) {
+        const wrap = document.getElementById('music-player-wrap');
+        if (!wrap) return;
+        wrap.innerHTML = buildMetingMarkup(api);
+      }
+
+      async function initMusicPlayer(customApi) {
+        if (!customApi) {
+          renderMetingPlayer('');
+          return;
+        }
+
+        try {
+          const endpoint = new URL(customApi);
+          const healthUrl = endpoint.origin + '/health';
+          const controller = new AbortController();
+          const timer = window.setTimeout(function() {
+            controller.abort();
+          }, 2500);
+
+          const res = await fetch(healthUrl, {
+            method: 'GET',
+            mode: 'cors',
+            signal: controller.signal
+          });
+
+          window.clearTimeout(timer);
+
+          if (res.ok) {
+            renderMetingPlayer(customApi);
+          } else {
+            renderMetingPlayer('');
+          }
+        } catch (error) {
+          renderMetingPlayer('');
+        }
+      }
     </script>
   
     <div id="cursor"></div>
