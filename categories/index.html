@@ -536,38 +536,38 @@
 
   
   
-  <!-- 显示当前时间的代码 -->
-<div style="color: #666; font-size: 14px; margin-top: 5px;">
-    <span id="footer-time"></span>
-</div>
 
-<script>
-    function updateTime() {
+  <div class="footer-time">
+    <span id="footer-time"></span>
+  </div>
+
+  <script>
+    (function() {
+      var footerTime = document.getElementById('footer-time');
+
+      function updateTime() {
+        if (!footerTime) return;
+
         var now = new Date();
-        var year = now.getFullYear();
-        var month = now.getMonth() + 1;
-        var day = now.getDate();
-        var hour = now.getHours();
-        var minute = now.getMinutes();
-        var second = now.getSeconds();
-        
-        // 格式化时间，补零操作
-        month = month < 10 ? '0' + month : month;
-        day = day < 10 ? '0' + day : day;
-        hour = hour < 10 ? '0' + hour : hour;
-        minute = minute < 10 ? '0' + minute : minute;
-        second = second < 10 ? '0' + second : second;
-        
-        var timeString = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-        document.getElementById('footer-time').innerHTML = '当前时间：' + timeString;
-    }
-    
-    // 页面加载时立即执行一次
-    updateTime();
-    // 每秒更新一次时间
-    setInterval(updateTime, 1000);
-    
-</script>
+        var parts = [
+          now.getFullYear(),
+          String(now.getMonth() + 1).padStart(2, '0'),
+          String(now.getDate()).padStart(2, '0')
+        ];
+        var clock = [
+          String(now.getHours()).padStart(2, '0'),
+          String(now.getMinutes()).padStart(2, '0'),
+          String(now.getSeconds()).padStart(2, '0')
+        ];
+
+        footerTime.textContent = '当前时间: ' + parts.join('-') + ' ' + clock.join(':');
+      }
+
+      updateTime();
+      setInterval(updateTime, 1000);
+    })();
+  </script>
+
 </div>
 
   </footer>
@@ -629,6 +629,7 @@
   
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<script src="/js/music-visualizer.js"></script>
 <script src="/js/mouse.js"></script>
 
 
@@ -641,27 +642,27 @@
 
   
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-
-        // 🎯 只在 /music/ 页面执行
+      document.addEventListener('DOMContentLoaded', function() {
         if (!location.pathname.startsWith('/music')) return;
 
         const targets = [
           document.querySelector('.markdown-body'),
           document.querySelector('.post'),
           document.querySelector('.article'),
-          document.querySelector('#board'),
+          document.querySelector('#board')
         ];
 
-        const target = targets.find(el => el);
+        const target = targets.find(Boolean);
+        if (!target || document.getElementById('music-page-shell')) return;
 
-        if (target) {
-          const div = document.createElement('div');
-          div.style.margin = "20px 0";
+        const shell = document.createElement('section');
+        shell.id = 'music-page-shell';
+        shell.style.margin = '20px 0';
 
-          div.innerHTML = `
-            <!-- 🎵 播放器 -->
+        shell.innerHTML = `
+          <div id="music-player-wrap">
             <meting-js
+              api="https://sheepo2-meting-api.sheep-o2.workers.dev/api/meting?server=:server&type=:type&id=:id&r=:r"
               server="netease"
               type="playlist"
               id="13942358671"
@@ -671,29 +672,25 @@
               preload="auto"
               volume="0.7">
             </meting-js>
+          </div>
 
-            <!-- 💬 评论区 -->
-            <div id="giscus-container" style="margin-top:30px;"></div>
-          `;
+          <div id="giscus-container" style="margin-top:30px;"></div>
+        `;
 
-          target.prepend(div);
+        target.prepend(shell);
 
-          // 👇 加载 Giscus
-          const script = document.createElement("script");
-          script.src = "https://giscus.app/client.js";
-          script.setAttribute("data-repo", "sheepO2/sheepO2.github.io");
-          script.setAttribute("data-repo-id", "R_kgDORpKDVg");
-          script.setAttribute("data-category", "General");
-          script.setAttribute("data-category-id", "DIC_kwDORpKDVs4C41AR");
-          script.setAttribute("data-mapping", "pathname");
-          script.setAttribute("data-theme", "preferred_color_scheme");
-          script.setAttribute("data-lang", "zh-CN");
-          script.crossOrigin = "anonymous";
-          script.async = true;
-
-          document.getElementById("giscus-container").appendChild(script);
-
-        }
+        const giscusScript = document.createElement('script');
+        giscusScript.src = 'https://giscus.app/client.js';
+        giscusScript.setAttribute('data-repo', 'sheepO2/sheepO2.github.io');
+        giscusScript.setAttribute('data-repo-id', 'R_kgDORpKDVg');
+        giscusScript.setAttribute('data-category', 'General');
+        giscusScript.setAttribute('data-category-id', 'DIC_kwDORpKDVs4C41AR');
+        giscusScript.setAttribute('data-mapping', 'pathname');
+        giscusScript.setAttribute('data-theme', 'preferred_color_scheme');
+        giscusScript.setAttribute('data-lang', 'zh-CN');
+        giscusScript.crossOrigin = 'anonymous';
+        giscusScript.async = true;
+        document.getElementById('giscus-container').appendChild(giscusScript);
       });
     </script>
   
