@@ -683,17 +683,14 @@
         }
 
         try {
-          const probeUrl = customApi
-            .replace(':server', 'netease')
-            .replace(':type', 'playlist')
-            .replace(':id', '13942358671')
-            .replace(':r', Math.random().toString(36).slice(2));
+          const endpoint = new URL(customApi);
+          const healthUrl = endpoint.origin + '/health';
           const controller = new AbortController();
           const timer = window.setTimeout(function() {
             controller.abort();
           }, 2500);
 
-          const res = await fetch(probeUrl, {
+          const res = await fetch(healthUrl, {
             method: 'GET',
             mode: 'cors',
             signal: controller.signal
@@ -702,14 +699,10 @@
           window.clearTimeout(timer);
 
           if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
-              renderMetingPlayer(customApi);
-              return;
-            }
+            renderMetingPlayer(customApi);
+          } else {
+            renderMetingPlayer('');
           }
-
-          renderMetingPlayer('');
         } catch (error) {
           renderMetingPlayer('');
         }
