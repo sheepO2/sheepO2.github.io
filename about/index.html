@@ -70,7 +70,7 @@
 
 
   
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
 <link rel="stylesheet" href="/css/custom.css">
 
 
@@ -757,8 +757,8 @@
 
 
   
-<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 <script src="/js/music-visualizer.js"></script>
 <script src="/js/mouse.js"></script>
 
@@ -839,35 +839,7 @@
       }
 
       async function initMusicPlayer(customApi) {
-        if (!customApi) {
-          renderMetingPlayer('');
-          return;
-        }
-
-        try {
-          const endpoint = new URL(customApi);
-          const healthUrl = endpoint.origin + '/health';
-          const controller = new AbortController();
-          const timer = window.setTimeout(function() {
-            controller.abort();
-          }, 2500);
-
-          const res = await fetch(healthUrl, {
-            method: 'GET',
-            mode: 'cors',
-            signal: controller.signal
-          });
-
-          window.clearTimeout(timer);
-
-          if (res.ok) {
-            renderMetingPlayer(customApi);
-          } else {
-            renderMetingPlayer('');
-          }
-        } catch (error) {
-          renderMetingPlayer('');
-        }
+        renderMetingPlayer(customApi || '');
       }
     </script>
   
