@@ -19,15 +19,15 @@
   <meta name="author" content="sheepO2">
   <meta name="keywords" content="">
   
-    <meta name="description" content="2026.4.22 修复了音乐界面播放器503的问题 2026.6.24 修复了音乐界面播放器加载不出的问题，增加了新分类，修改了浏览器图标">
+    <meta name="description" content="2026.4.22 修复了音乐界面播放器503的问题 2026.9.6 修复了音乐界面播放器无法加载的问题（必须使用魔法才会显示），增加了新分类，修改了浏览器图标">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博客更新日志">
 <meta property="og:url" content="https://sheepo2.github.io/2026/04/22/%E5%8D%9A%E5%AE%A2%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97/">
 <meta property="og:site_name" content="sheepO2">
-<meta property="og:description" content="2026.4.22 修复了音乐界面播放器503的问题 2026.6.24 修复了音乐界面播放器加载不出的问题，增加了新分类，修改了浏览器图标">
+<meta property="og:description" content="2026.4.22 修复了音乐界面播放器503的问题 2026.9.6 修复了音乐界面播放器无法加载的问题（必须使用魔法才会显示），增加了新分类，修改了浏览器图标">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-04-22T13:13:56.000Z">
-<meta property="article:modified_time" content="2026-06-25T18:27:25.497Z">
+<meta property="article:modified_time" content="2026-09-06T06:35:26.750Z">
 <meta property="article:author" content="sheepO2">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -411,7 +411,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          67 字
+          78 字
         
       </span>
     
@@ -467,7 +467,7 @@
               <div class="markdown-body">
                 
                 <p><em><strong><span class="highlight">2026.4.22 修复了音乐界面播放器503的问题</spanS></strong></em></p>
-<p><em><strong><span class="highlight">2026.6.24 修复了音乐界面播放器加载不出的问题，增加了新分类，修改了浏览器图标</spanS></strong></em></p>
+<p><em><strong><span class="highlight">2026.9.6 修复了音乐界面播放器无法加载的问题（必须使用魔法才会显示），增加了新分类，修改了浏览器图标</spanS></strong></em></p>
 
                 
               </div>
@@ -1040,9 +1040,6 @@
 
 
   
-    <div id="cursor"></div>
-    <div id="cursor-trail"></div>
-  
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         if (!location.pathname.startsWith('/music')) return;
@@ -1114,6 +1111,9 @@
         renderMetingPlayer(customApi || '');
       }
     </script>
+  
+    <div id="cursor"></div>
+    <div id="cursor-trail"></div>
   
 
   <noscript>

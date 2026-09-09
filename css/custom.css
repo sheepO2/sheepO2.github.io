@@ -365,6 +365,15 @@ body {
   transform: rotateY(14deg) translateZ(10px);
 }
 
+.unity-album__image-link {
+  position: relative;
+  z-index: 1;
+  display: block;
+  min-height: 0;
+  height: 100%;
+  cursor: zoom-in;
+}
+
 .unity-album__page img {
   position: relative;
   z-index: 1;
@@ -373,6 +382,40 @@ body {
   min-height: 0;
   object-fit: cover;
   border-radius: 5px;
+}
+
+.fancybox-container .fancybox-stage,
+.fancybox-container .fancybox-slide,
+.fancybox-container .fancybox-image {
+  cursor: zoom-out !important;
+}
+
+.fancybox-container .fancybox-button,
+.fancybox-container .fancybox-thumbs,
+.fancybox-container .fancybox-navigation button {
+  cursor: pointer !important;
+}
+
+body.fancybox-active,
+body.fancybox-active * {
+  cursor: auto !important;
+}
+
+body.fancybox-active .fancybox-stage,
+body.fancybox-active .fancybox-slide,
+body.fancybox-active .fancybox-image {
+  cursor: zoom-out !important;
+}
+
+body.fancybox-active .fancybox-button,
+body.fancybox-active .fancybox-thumbs,
+body.fancybox-active .fancybox-navigation button {
+  cursor: pointer !important;
+}
+
+body.fancybox-active #cursor,
+body.fancybox-active #cursor-trail {
+  display: none !important;
 }
 
 .unity-album__page figcaption {
@@ -557,14 +600,14 @@ body {
 }
 /* unity album refinements */
 .unity-album {
-  grid-template-columns: 52px minmax(260px, 820px) 52px;
+  grid-template-columns: 56px minmax(320px, 1040px) 56px;
   justify-content: center;
-  gap: clamp(0.75rem, 3vw, 1.5rem);
+  gap: clamp(0.85rem, 3vw, 1.75rem);
   overflow: visible;
 }
 
 .unity-album__book {
-  width: min(60vw, 700px);
+  width: min(82vw, 960px);
 }
 
 .unity-album__turn {
@@ -634,9 +677,9 @@ body {
 
 @media (max-width: 768px) {
   .unity-album {
-    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
     gap: 0.35rem;
-    padding-inline: 0.35rem;
+    padding-inline: 0.15rem;
   }
 
   .unity-album__book {

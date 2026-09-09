@@ -1,0 +1,886 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon.png">
+  <link rel="icon" href="/img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="sheepO2">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="first test blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="unity相关 - unity改模">
+<meta property="og:url" content="https://sheepo2.github.io/2026/06/24/unity%E7%9B%B8%E5%85%B3/">
+<meta property="og:site_name" content="sheepO2">
+<meta property="og:description" content="first test blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-06T06:55:33.345Z">
+<meta property="article:author" content="sheepO2">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>unity相关 - unity改模 - sheepO2</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"sheepo2.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":"https://cloud.umami.is/script.js","website_id":"28a27955-0e23-4f3f-b084-846ec0b3c5b8","domains":"sheepo2.github.io","start_time":"2026-03-18T00:00:00.000Z","token":"api_eUniskXCF1SWCsj4VIrDVtoXPmSzA9LI","api_server":"https://api.umami.is"}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        let umami = document.createElement('script');
+        umami.async = true;
+        umami.src = "https://cloud.umami.is/script.js";
+        umami.setAttribute("data-website-id", "28a27955-0e23-4f3f-b084-846ec0b3c5b8");
+        umami.setAttribute("data-domains", "sheepo2.github.io");
+        document.head.appendChild(umami);
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+
+  
+    <script>
+      (function () {
+        const images = [
+          '/img/random/1.png',
+          '/img/random/2.png',
+          '/img/random/3.png',
+          '/img/random/4.png',
+          '/img/random/5.png',
+          '/img/random/6.png',
+          '/img/random/7.png',
+          '/img/random/default.png'
+        ];
+
+        let bg = sessionStorage.getItem('random-bg');
+
+        if (!bg) {
+          bg = images[Math.floor(Math.random() * images.length)];
+          sessionStorage.setItem('random-bg', bg);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+          const banner =
+            document.querySelector('#banner') ||
+            document.querySelector('.banner') ||
+            document.querySelector('.banner-img');
+
+          if (banner) {
+            // 🎯 有 banner → 改 banner
+            banner.style.setProperty(
+              'background-image',
+              "url('" + bg + "')",
+              'important'
+            );
+            banner.style.backgroundSize = "cover";
+            banner.style.backgroundPosition = "center";
+          } else {
+            // 🎯 没 banner → 改 body（兜底）
+            document.body.style.setProperty(
+              'background-image',
+              "url('" + bg + "')",
+              'important'
+            );
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+            document.body.style.backgroundAttachment = "fixed";
+          }
+
+        });
+      })();
+    </script>
+  
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 100vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>sheepO2</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/music/" target="_self">
+                <i class="iconfont icon-music"></i>
+                <span>音乐</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/music/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-music"></i>
+                  <span>音乐</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="unity改模"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-06-24 00:00" pubdate>
+          2026年6月24日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          0 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          1 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+<script async defer src="https://cloud.umami.is/script.js" data-website-id="694b6305-0d9b-421d-bd52-3a3baa3a4a9c"></script>
+  </header>
+
+  <main>
+    
+      
+
+
+  
+  <section class="unity-album" data-unity-album aria-label="unity改模照片展示">
+    <button class="unity-album__turn unity-album__turn--prev" type="button" data-album-prev aria-label="上一张"></button>
+    <div class="unity-album__book">
+      <div class="unity-album__spine" aria-hidden="true"></div>
+      <div class="unity-album__stack" data-album-stack>
+        
+          <figure class="unity-album__page" data-album-page style="--page:0;">
+            <a class="unity-album__image-link fancybox fancybox.image" href="/img/unity/01.png" data-fancybox="unity-album" data-caption="模型展示图 1">
+              <img src="/img/unity/01.png" srcset="/img/loading.gif" lazyload alt="模型展示图 1">
+            </a>
+            <figcaption>
+              <span class="unity-album__caption-title">模型展示图 1</span>
+              <time class="unity-album__date">2025-10-02</time>
+            </figcaption>
+          </figure>
+        
+          <figure class="unity-album__page" data-album-page style="--page:1;">
+            <a class="unity-album__image-link fancybox fancybox.image" href="/img/unity/02.png" data-fancybox="unity-album" data-caption="模型展示图 2">
+              <img src="/img/unity/02.png" srcset="/img/loading.gif" lazyload alt="模型展示图 2">
+            </a>
+            <figcaption>
+              <span class="unity-album__caption-title">模型展示图 2</span>
+              <time class="unity-album__date">2026-01-01</time>
+            </figcaption>
+          </figure>
+        
+          <figure class="unity-album__page" data-album-page style="--page:2;">
+            <a class="unity-album__image-link fancybox fancybox.image" href="/img/unity/03.png" data-fancybox="unity-album" data-caption="模型展示图 3">
+              <img src="/img/unity/03.png" srcset="/img/loading.gif" lazyload alt="模型展示图 3">
+            </a>
+            <figcaption>
+              <span class="unity-album__caption-title">模型展示图 3</span>
+              <time class="unity-album__date">2026-06-24</time>
+            </figcaption>
+          </figure>
+        
+          <figure class="unity-album__page" data-album-page style="--page:3;">
+            <a class="unity-album__image-link fancybox fancybox.image" href="/img/unity/04.png" data-fancybox="unity-album" data-caption="模型展示图 4">
+              <img src="/img/unity/04.png" srcset="/img/loading.gif" lazyload alt="模型展示图 4">
+            </a>
+            <figcaption>
+              <span class="unity-album__caption-title">模型展示图 4</span>
+              <time class="unity-album__date">2026-09-05</time>
+            </figcaption>
+          </figure>
+        
+      </div>
+    </div>
+    <button class="unity-album__turn unity-album__turn--next" type="button" data-album-next aria-label="下一张"></button>
+  </section>
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+
+  <div class="footer-time">
+    <span id="footer-time"></span>
+  </div>
+
+  <script>
+    (function() {
+      var footerTime = document.getElementById('footer-time');
+
+      function updateTime() {
+        if (!footerTime) return;
+
+        var now = new Date();
+        var parts = [
+          now.getFullYear(),
+          String(now.getMonth() + 1).padStart(2, '0'),
+          String(now.getDate()).padStart(2, '0')
+        ];
+        var clock = [
+          String(now.getHours()).padStart(2, '0'),
+          String(now.getMinutes()).padStart(2, '0'),
+          String(now.getSeconds()).padStart(2, '0')
+        ];
+
+        footerTime.textContent = '当前时间: ' + parts.join('-') + ' ' + clock.join(':');
+      }
+
+      updateTime();
+      setInterval(updateTime, 1000);
+    })();
+  </script>
+
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/openkounter.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+<script src="/js/music-visualizer.js"></script>
+<script src="/js/unity-album.js"></script>
+<script src="/js/mouse.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+
+  
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        if (!location.pathname.startsWith('/music')) return;
+
+        const targets = [
+          document.querySelector('.markdown-body'),
+          document.querySelector('.post'),
+          document.querySelector('.article'),
+          document.querySelector('#board')
+        ];
+
+        const target = targets.find(Boolean);
+        if (!target || document.getElementById('music-page-shell')) return;
+
+        const customMusicApi = "https://sheepo2-meting-api.45535779.workers.dev/api/meting?server=:server&type=:type&id=:id&r=:r";
+        const shell = document.createElement('section');
+        shell.id = 'music-page-shell';
+        shell.style.margin = '20px 0';
+
+        shell.innerHTML = `
+          <div id="music-player-wrap">
+            <div id="music-player-placeholder">Loading music player...</div>
+          </div>
+
+          <div id="giscus-container" style="margin-top:30px;"></div>
+        `;
+
+        target.prepend(shell);
+
+        const giscusScript = document.createElement('script');
+        giscusScript.src = 'https://giscus.app/client.js';
+        giscusScript.setAttribute('data-repo', 'sheepO2/sheepO2.github.io');
+        giscusScript.setAttribute('data-repo-id', 'R_kgDORpKDVg');
+        giscusScript.setAttribute('data-category', 'General');
+        giscusScript.setAttribute('data-category-id', 'DIC_kwDORpKDVs4C41AR');
+        giscusScript.setAttribute('data-mapping', 'pathname');
+        giscusScript.setAttribute('data-theme', 'preferred_color_scheme');
+        giscusScript.setAttribute('data-lang', 'zh-CN');
+        giscusScript.crossOrigin = 'anonymous';
+        giscusScript.async = true;
+        document.getElementById('giscus-container').appendChild(giscusScript);
+
+        initMusicPlayer(customMusicApi);
+      });
+
+      function buildMetingMarkup(api) {
+        const apiAttr = api ? ' api="' + api + '"' : '';
+        return `
+          <meting-js${apiAttr}
+            server="netease"
+            type="playlist"
+            id="13942358671"
+            fixed="false"
+            autoplay="false"
+            order="random"
+            preload="auto"
+            volume="0.7">
+          </meting-js>
+        `;
+      }
+
+      function renderMetingPlayer(api) {
+        const wrap = document.getElementById('music-player-wrap');
+        if (!wrap) return;
+        wrap.innerHTML = buildMetingMarkup(api);
+      }
+
+      async function initMusicPlayer(customApi) {
+        renderMetingPlayer(customApi || '');
+      }
+    </script>
+  
+    <div id="cursor"></div>
+    <div id="cursor-trail"></div>
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
