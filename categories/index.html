@@ -138,7 +138,6 @@
             document.querySelector('.banner-img');
 
           if (banner) {
-            // 🎯 有 banner → 改 banner
             banner.style.setProperty(
               'background-image',
               "url('" + bg + "')",
@@ -147,7 +146,6 @@
             banner.style.backgroundSize = "cover";
             banner.style.backgroundPosition = "center";
           } else {
-            // 🎯 没 banner → 改 body（兜底）
             document.body.style.setProperty(
               'background-image',
               "url('" + bg + "')",
@@ -166,6 +164,117 @@
 
 
 <body>
+  
+    <script>
+      (function () {
+        var root = "/";
+        var path = window.location.pathname.replace(/\/+$/, '') || '/';
+        if (path === root) document.documentElement.classList.add('dna-loader-active');
+      }());
+    </script>
+    <style>
+      #dna-loader { display: none; }
+      .dna-loader-active { overflow: hidden; }
+      .dna-loader-active #dna-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        isolation: isolate;
+        background: #fdfdff;
+        color: #122bd6;
+        opacity: 1;
+        transition: opacity .52s ease, visibility .52s step-end;
+      }
+      .dna-loader-active #dna-loader::before {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        content: '';
+        background:
+          radial-gradient(circle at 49% 5%, rgba(32, 49, 239, .92) 0 1px, transparent 2px) 0 0 / 7px 7px,
+          radial-gradient(circle at 68% 82%, rgba(18, 43, 214, .22) 0 1px, transparent 1.5px) 0 0 / 11px 11px,
+          linear-gradient(180deg, #fff 0%, #fbfbff 100%);
+        opacity: .72;
+      }
+      .dna-loader-active #dna-loader::after {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        content: '';
+        background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(18, 43, 214, .028) 4px 5px);
+        mix-blend-mode: multiply;
+        pointer-events: none;
+      }
+      .dna-loader-active #dna-loader.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+      .dna-loader__panel { display: grid; place-items: center; gap: 1.15rem; transform: rotate(-4deg); }
+      .dna-loader__helix { position: relative; width: min(62vw, 370px); height: min(52vh, 300px); }
+      .dna-loader__rung {
+        position: absolute;
+        top: calc(var(--i) * 5.55%);
+        left: 50%;
+        width: 43%;
+        height: 2px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(24, 43, 215, .22), #1127d4 48%, rgba(31, 52, 233, .22));
+        box-shadow: 0 0 7px rgba(22, 43, 219, .35);
+        transform: translateX(-50%) scaleX(.42);
+        animation: dna-rung 1.7s ease-in-out infinite;
+        animation-delay: calc(var(--i) * -.094s);
+      }
+      .dna-loader__rung::before, .dna-loader__rung::after {
+        position: absolute;
+        top: 50%;
+        width: 10px;
+        height: 10px;
+        border: 1px solid #1730d7;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 0 9px rgba(24, 43, 215, .42);
+        content: '';
+        transform: translateY(-50%);
+      }
+      .dna-loader__rung::before { left: -5px; }
+      .dna-loader__rung::after { right: -5px; }
+      .dna-loader__label { font: 500 clamp(.62rem, 1.4vw, .78rem)/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .38em; text-indent: .38em; }
+      .dna-loader__pulse { width: 138px; height: 1px; background: rgba(18, 43, 214, .18); overflow: hidden; }
+      .dna-loader__pulse::before { display: block; width: 45%; height: 100%; background: #1730d7; box-shadow: 0 0 10px #1730d7; content: ''; animation: dna-scan 1.1s ease-in-out infinite; }
+      @keyframes dna-rung {
+        0%, 100% { transform: translateX(-50%) scaleX(.42); opacity: .38; }
+        50% { transform: translateX(-50%) scaleX(1.46); opacity: 1; }
+      }
+      @keyframes dna-scan { 0% { transform: translateX(-120%); } 100% { transform: translateX(310%); } }
+      @media (prefers-reduced-motion: reduce) { .dna-loader__rung, .dna-loader__pulse::before { animation: none; } }
+    </style>
+    <div id="dna-loader" role="status" aria-label="正在加载首页">
+      <div class="dna-loader__panel">
+        <div class="dna-loader__helix" aria-hidden="true"></div>
+        <div class="dna-loader__label">INITIALIZING</div>
+        <div class="dna-loader__pulse" aria-hidden="true"></div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var loader = document.getElementById('dna-loader');
+        if (!document.documentElement.classList.contains('dna-loader-active') || !loader) return;
+        var helix = loader.querySelector('.dna-loader__helix');
+        for (var i = 0; i < 19; i += 1) {
+          var rung = document.createElement('span');
+          rung.className = 'dna-loader__rung';
+          rung.style.setProperty('--i', i);
+          helix.appendChild(rung);
+        }
+        var dismiss = function () {
+          loader.classList.add('is-leaving');
+          window.setTimeout(function () { document.documentElement.classList.remove('dna-loader-active'); }, 540);
+          window.setTimeout(function () { loader.remove(); }, 650);
+        };
+        window.addEventListener('load', function () { window.setTimeout(dismiss, 380); }, { once: true });
+        window.setTimeout(dismiss, 4200);
+      }());
+    </script>
   
 
   <header>
@@ -448,6 +557,52 @@
     
     <div class="category row nomargin-x">
       <a class="category-item collapsed
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="unity"
+        id="heading-439b3a25b555b3bc8667a09a036ae70c" role="tab"
+        
+          data-toggle="collapse" href="#collapse-439b3a25b555b3bc8667a09a036ae70c"
+          aria-expanded="false"
+        
+      >
+        unity
+        <span class="list-group-count"></span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+        <a href="/categories/unity/" class="category-count col-2 col-md-1 col-xm-1">
+          <i class="iconfont icon-articles"></i>
+          <span>1</span>
+        </a>
+      
+      <div class="category-collapse collapse " id="collapse-439b3a25b555b3bc8667a09a036ae70c"
+           role="tabpanel" aria-labelledby="heading-439b3a25b555b3bc8667a09a036ae70c">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/2026/06/24/unity%E7%9B%B8%E5%85%B3/" title="unity相关"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">unity相关</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+    
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item collapsed
           list-group-item category-item-action col-10 col-md-11 col-xm-11" title="test"
         id="heading-098f6bcd4621d373cade4e832627b4f6" role="tab"
         
@@ -525,52 +680,6 @@
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">博客搭建过程</span>
-        </a>
-      
-    
-  </div>
-
-        
-      </div>
-    </div>
-  
-    
-    
-    
-    
-    <div class="category row nomargin-x">
-      <a class="category-item collapsed
-          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="unity"
-        id="heading-439b3a25b555b3bc8667a09a036ae70c" role="tab"
-        
-          data-toggle="collapse" href="#collapse-439b3a25b555b3bc8667a09a036ae70c"
-          aria-expanded="false"
-        
-      >
-        unity
-        <span class="list-group-count"></span>
-        <i class="iconfont icon-arrowright"></i>
-      </a>
-      
-        <a href="/categories/unity/" class="category-count col-2 col-md-1 col-xm-1">
-          <i class="iconfont icon-articles"></i>
-          <span>1</span>
-        </a>
-      
-      <div class="category-collapse collapse " id="collapse-439b3a25b555b3bc8667a09a036ae70c"
-           role="tabpanel" aria-labelledby="heading-439b3a25b555b3bc8667a09a036ae70c">
-        
-        
-          
-  <div class="category-post-list">
-    
-    
-      
-      
-        <a href="/2026/06/24/unity%E7%9B%B8%E5%85%B3/" title="unity相关"
-           class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">unity相关</span>
         </a>
       
     
