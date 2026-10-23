@@ -349,18 +349,6 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/diary/" target="_self">
-                <i class="iconfont icon-&#xe7fb;"></i>
-                <span>日记</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
               <a class="nav-link" href="/about/" target="_self">
                 <i class="iconfont icon-user-fill"></i>
                 <span>关于</span>
@@ -445,20 +433,6 @@
                 <div class="mobile-grid-item">
                   <i class="iconfont icon-music"></i>
                   <span>音乐</span>
-                </div>
-              </a>
-            </div>
-          
-        
-          
-          
-          
-          
-            <div class="col-4 mobile-grid-cell">
-              <a href="/diary/" target="_self">
-                <div class="mobile-grid-item">
-                  <i class="iconfont icon-&#xe7fb;"></i>
-                  <span>日记</span>
                 </div>
               </a>
             </div>
@@ -1273,6 +1247,14 @@
     <div id="cursor"></div>
     <div id="cursor-trail"></div>
   
+      <script>
+        document.addEventListener('keydown', function (event) {
+          if (event.key !== 'Enter' && event.keyCode !== 13) return;
+          var passwordInput = document.getElementById('hbePass');
+          if (passwordInput) passwordInput.value = passwordInput.value.toLowerCase();
+        }, true);
+      </script>
+    
 
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
