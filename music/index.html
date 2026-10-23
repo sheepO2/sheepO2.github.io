@@ -195,20 +195,7 @@
         inset: 0;
         z-index: -2;
         content: '';
-        background:
-          radial-gradient(circle at 49% 5%, rgba(32, 49, 239, .92) 0 1px, transparent 2px) 0 0 / 7px 7px,
-          radial-gradient(circle at 68% 82%, rgba(18, 43, 214, .22) 0 1px, transparent 1.5px) 0 0 / 11px 11px,
-          linear-gradient(180deg, #fff 0%, #fbfbff 100%);
-        opacity: .72;
-      }
-      .dna-loader-active #dna-loader::after {
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        content: '';
-        background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(18, 43, 214, .028) 4px 5px);
-        mix-blend-mode: multiply;
-        pointer-events: none;
+        background: linear-gradient(180deg, #fff 0%, #f7f9ff 100%);
       }
       .dna-loader-active #dna-loader.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
       .dna-loader__panel { display: grid; place-items: center; gap: 1.15rem; transform: rotate(-4deg); }
