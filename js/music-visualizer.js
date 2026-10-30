@@ -5,7 +5,9 @@ window.addEventListener('DOMContentLoaded', function() {
   var playerPollTimer = null;
   var fallbackTimer = null;
   var shell = null;
-  var bars = [];
+  var pointCount = 36;
+  var waveform = null;
+  var renderedOffsets = [];
   var statusNode = null;
   var audioContext = null;
   var analyser = null;
@@ -58,7 +60,9 @@ window.addEventListener('DOMContentLoaded', function() {
       '  <span class="music-footer-visualizer__status" id="music-footer-visualizer-status">Waiting for player...</span>',
       '</div>',
       '<div class="music-footer-visualizer__body">',
-      '  <div class="music-footer-visualizer__bars" id="music-footer-spectrum"></div>',
+      '  <svg class="music-footer-visualizer__waveform" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">',
+      '    <polyline id="music-footer-spectrum" points="0,50 100,50"></polyline>',
+      '  </svg>',
       '  <div class="music-footer-visualizer__glow"></div>',
       '</div>'
     ].join('');
@@ -66,16 +70,7 @@ window.addEventListener('DOMContentLoaded', function() {
     playerWrap.parentNode.insertBefore(shell, playerWrap);
 
     statusNode = shell.querySelector('#music-footer-visualizer-status');
-    var barsRoot = shell.querySelector('#music-footer-spectrum');
-
-    for (var i = 0; i < 28; i++) {
-      var bar = document.createElement('span');
-      bar.className = 'music-footer-visualizer__bar';
-      bar.style.transform = 'scaleY(0.12)';
-      bar.style.opacity = '0.45';
-      barsRoot.appendChild(bar);
-      bars.push(bar);
-    }
+    waveform = shell.querySelector('#music-footer-spectrum');
 
     return true;
   }
@@ -98,24 +93,60 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  function renderBarsFromValues(values, maxValue) {
-    for (var i = 0; i < bars.length; i++) {
-      var raw = values[i] || 0;
-      var normalized = Math.max(0.08, raw / maxValue);
-      var scale = Math.min(1, normalized);
-      var opacity = Math.min(1, 0.35 + scale * 0.65);
-      bars[i].style.transform = 'scaleY(' + scale.toFixed(3) + ')';
-      bars[i].style.opacity = opacity.toFixed(3);
-      bars[i].style.filter = scale > 0.68 ? 'brightness(1.08)' : 'none';
+  function renderWaveformFromValues(values, maxValue) {
+    if (!waveform) return;
+
+    var points = [];
+    var energy = 0;
+    var framePeak = 0;
+    var frameTotal = 0;
+    for (var peakIndex = 0; peakIndex < pointCount; peakIndex++) {
+      framePeak = Math.max(framePeak, values[peakIndex] || 0);
+      frameTotal += values[peakIndex] || 0;
     }
+    var frameAverage = frameTotal / pointCount;
+    // Retain the distance between frequency bands. The previous aggressive
+    // ceiling clipped too many bins to the same height and made a repeating
+    // pattern; this uses each bin's relative energy instead.
+    var gainCeiling = Math.max(maxValue * 0.12, framePeak * 1.04, 1);
+    var spread = Math.max(framePeak - frameAverage, maxValue * 0.055, 1);
+    for (var i = 0; i < pointCount; i++) {
+      var raw = values[i] || 0;
+      var normalized = Math.min(1, Math.max(0, raw / gainCeiling));
+      // Keep silence as an actual straight line; ease each live bucket toward
+      // its target instead of snapping from the idle line to a full waveform.
+      var relativeEnergy = Math.max(-1, Math.min(1, (raw - frameAverage) / spread));
+      var targetOffset = normalized > 0.025
+        ? relativeEnergy * 46
+        : 0;
+      var currentOffset = renderedOffsets[i] || 0;
+      var easing = Math.abs(targetOffset) > Math.abs(currentOffset) ? 0.27 : 0.12;
+      var offset = currentOffset + (targetOffset - currentOffset) * easing;
+      renderedOffsets[i] = offset;
+      // Give interior points a small, data-derived horizontal offset. This
+      // prevents the line from reading as an evenly spaced template while
+      // retaining the underlying frequency order.
+      var x = i * (100 / (pointCount - 1));
+      if (i > 0 && i < pointCount - 1) {
+        x += relativeEnergy * 0.52;
+      }
+      energy += normalized;
+      points.push(x.toFixed(2) + ',' + (50 + offset).toFixed(2));
+    }
+    waveform.setAttribute('points', points.join(' '));
+    var averageEnergy = energy / pointCount;
+    waveform.style.opacity = (0.58 + Math.min(0.42, averageEnergy * 0.8)).toFixed(3);
+    waveform.style.filter = averageEnergy > 0.48 ? 'brightness(1.18)' : 'none';
+    if (shell) shell.style.setProperty('--music-energy', Math.min(1, averageEnergy).toFixed(3));
   }
 
-  function resetBars() {
-    for (var i = 0; i < bars.length; i++) {
-      bars[i].style.transform = 'scaleY(0.12)';
-      bars[i].style.opacity = '0.45';
-      bars[i].style.filter = 'none';
-    }
+  function resetWaveform() {
+    if (!waveform) return;
+    renderedOffsets = [];
+    waveform.setAttribute('points', '0,50 100,50');
+    waveform.style.opacity = '0.42';
+    waveform.style.filter = 'none';
+    if (shell) shell.style.setProperty('--music-energy', '0');
   }
 
   function stopFallback() {
@@ -134,18 +165,18 @@ window.addEventListener('DOMContentLoaded', function() {
       setFallbackMode(true);
 
       if (!playing) {
-        resetBars();
+        resetWaveform();
         return;
       }
 
       var values = [];
-      for (var i = 0; i < bars.length; i++) {
+      for (var i = 0; i < pointCount; i++) {
         var wave = 0.24 + Math.abs(Math.sin(Date.now() / 210 + i * 0.62)) * 0.5;
         var jitter = Math.random() * 0.18;
         values.push(Math.min(1, wave + jitter));
       }
 
-      renderBarsFromValues(values, 1);
+      renderWaveformFromValues(values, 1);
     }, 120);
   }
 
@@ -158,13 +189,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
   function renderSpectrumFrame() {
     if (!analyser || !frequencyData || !connectedAudio) {
-      startFallback();
+      resetWaveform();
       return;
     }
 
     if (connectedAudio.paused) {
       setPlayingState(false);
-      resetBars();
+      resetWaveform();
       animationFrameId = window.requestAnimationFrame(renderSpectrumFrame);
       return;
     }
@@ -173,10 +204,10 @@ window.addEventListener('DOMContentLoaded', function() {
     setFallbackMode(false);
     analyser.getByteFrequencyData(frequencyData);
 
-    var bucketSize = Math.max(1, Math.floor(frequencyData.length / bars.length));
+    var bucketSize = Math.max(1, Math.floor(frequencyData.length / pointCount));
     var values = [];
     var totalEnergy = 0;
-    for (var i = 0; i < bars.length; i++) {
+    for (var i = 0; i < pointCount; i++) {
       var sum = 0;
       for (var j = 0; j < bucketSize; j++) {
         sum += frequencyData[i * bucketSize + j] || 0;
@@ -202,7 +233,7 @@ window.addEventListener('DOMContentLoaded', function() {
       silentTicks = 0;
     }
 
-    renderBarsFromValues(values, 255);
+    renderWaveformFromValues(values, 255);
     animationFrameId = window.requestAnimationFrame(renderSpectrumFrame);
   }
 
@@ -280,7 +311,7 @@ window.addEventListener('DOMContentLoaded', function() {
       resetAutoSkipCounters();
       setStatus('Paused');
       setPlayingState(false);
-      resetBars();
+      resetWaveform();
     });
 
     audio.addEventListener('ended', function() {
@@ -288,7 +319,7 @@ window.addEventListener('DOMContentLoaded', function() {
       resetAutoSkipCounters();
       setStatus('Playback ended');
       setPlayingState(false);
-      resetBars();
+      resetWaveform();
     });
 
     audio.addEventListener('loadedmetadata', function() {
@@ -299,6 +330,8 @@ window.addEventListener('DOMContentLoaded', function() {
     audio.addEventListener('loadstart', function() {
       extendSkipGrace(5000);
       resetAutoSkipCounters();
+      stopFallback();
+      resetWaveform();
       setStatus('Loading track...');
     });
 
@@ -469,9 +502,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     if (playerRoot) {
       setStatus('Player mounted, waiting for audio...');
-      if (isPlaying()) {
-        startFallback();
-      }
+      resetWaveform();
       return;
     }
 
@@ -483,7 +514,7 @@ window.addEventListener('DOMContentLoaded', function() {
       window.clearInterval(mountTimer);
       mountTimer = null;
       setStatus('Visualizer injected');
-      startFallback();
+      resetWaveform();
       playerPollTimer = window.setInterval(syncState, 400);
       syncState();
     }
