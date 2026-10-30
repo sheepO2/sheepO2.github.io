@@ -32,8 +32,6 @@
 <meta name="twitter:card" content="summary_large_image">
   
   
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
   
   <title>音乐 - sheepO2</title>
 
@@ -72,7 +70,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"sheepo2.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":"https://cloud.umami.is/script.js","website_id":"28a27955-0e23-4f3f-b084-846ec0b3c5b8","domains":"sheepo2.github.io","start_time":"2026-03-18T00:00:00.000Z","token":"api_eUniskXCF1SWCsj4VIrDVtoXPmSzA9LI","api_server":"https://api.umami.is"}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"sheepo2.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":false,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":"https://cloud.umami.is/script.js","website_id":"694b6305-0d9b-421d-bd52-3a3baa3a4a9c","domains":"sheepo2.github.io","start_time":"2026-03-18T00:00:00.000Z","token":"api_eUniskXCF1SWCsj4VIrDVtoXPmSzA9LI","api_server":"https://api.umami.is/v1"}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -93,7 +91,7 @@
         let umami = document.createElement('script');
         umami.async = true;
         umami.src = "https://cloud.umami.is/script.js";
-        umami.setAttribute("data-website-id", "28a27955-0e23-4f3f-b084-846ec0b3c5b8");
+        umami.setAttribute("data-website-id", "694b6305-0d9b-421d-bd52-3a3baa3a4a9c");
         umami.setAttribute("data-domains", "sheepo2.github.io");
         document.head.appendChild(umami);
       }
@@ -493,7 +491,7 @@
 
 
 </div>
-<script async defer src="https://cloud.umami.is/script.js" data-website-id="694b6305-0d9b-421d-bd52-3a3baa3a4a9c"></script>
+<script async defer src="https://cloud.umami.is/script.js" data-website-id="28a27955-0e23-4f3f-b084-846ec0b3c5b8"></script>
   </header>
 
   <main>
@@ -570,21 +568,20 @@
 
   
     
-      <span id="busuanzi_container_site_pv" style="display: none">
+      <span id="umami-site-pv-container" style="display: none">
         总访问量 
-        <span id="busuanzi_value_site_pv"></span>
+        <span id="umami-site-pv"></span>
          次
       </span>
     
     
-      <span id="busuanzi_container_site_uv" style="display: none">
+      <span id="umami-site-uv-container" style="display: none">
         总访客数 
-        <span id="busuanzi_value_site_uv"></span>
+        <span id="umami-site-uv"></span>
          人
       </span>
     
     
-
   
 
 </div>
@@ -665,7 +662,7 @@
 
   <script  src="/js/local-search.js" ></script>
 
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+  <script defer src="/js/umami-view.js" ></script>
 
 
 

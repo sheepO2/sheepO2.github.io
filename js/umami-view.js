@@ -35,13 +35,19 @@ const request_header = {
   },
 };
 
+// Umami Cloud v1 returns numeric values, while older self-hosted versions
+// return objects shaped like { value, prev }. Support both response formats.
+function statValue(stat) {
+  return typeof stat === "object" && stat !== null ? stat.value : stat;
+}
+
 // 获取站点统计数据
 async function siteStats() {
   try {
     const response = await fetch(`${request_url}?${params}`, request_header);
     const data = await response.json();
-    const uniqueVisitors = data.visitors.value; // 获取独立访客数
-    const pageViews = data.pageviews.value; // 获取页面浏览量
+    const uniqueVisitors = statValue(data.visitors); // 获取独立访客数
+    const pageViews = statValue(data.pageviews); // 获取页面浏览量
 
     let pvCtn = document.querySelector("#umami-site-pv-container");
     if (pvCtn) {
@@ -71,7 +77,7 @@ async function pageStats(path) {
   try {
     const response = await fetch(`${request_url}?${params}&url=${path}`, request_header);
     const data = await response.json();
-    const pageViews = data.pageviews.value;
+    const pageViews = statValue(data.pageviews);
 
     let viewCtn = document.querySelector("#umami-page-views-container");
     if (viewCtn) {
