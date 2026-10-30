@@ -718,75 +718,126 @@
 
   
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        if (!location.pathname.startsWith('/music')) return;
-
-        const targets = [
-          document.querySelector('.markdown-body'),
-          document.querySelector('.post'),
-          document.querySelector('.article'),
-          document.querySelector('#board')
-        ];
-
-        const target = targets.find(Boolean);
-        if (!target || document.getElementById('music-page-shell')) return;
-
+      document.addEventListener('DOMContentLoaded', function () {
+        const stateKey = 'sheepo2-music-player-state-v1';
+        const isMusicPage = location.pathname.startsWith('/music');
         const customMusicApi = "https://sheepo2-meting-api.45535779.workers.dev/api/meting?server=:server&type=:type&id=:id&r=:r";
-        const shell = document.createElement('section');
-        shell.id = 'music-page-shell';
-        shell.style.margin = '20px 0';
+        let player = null;
+        let restoreState = readState();
+        let restorePending = Boolean(restoreState);
 
-        shell.innerHTML = `
-          <div id="music-player-wrap">
-            <div id="music-player-placeholder">Loading music player...</div>
-          </div>
+        function readState() {
+          try { return JSON.parse(sessionStorage.getItem(stateKey) || 'null'); }
+          catch (error) { return null; }
+        }
 
-          <div id="giscus-container" style="margin-top:30px;"></div>
-        `;
+        function saveState() {
+          if (!player || !player.audio) return;
+          const audio = player.audio;
+          const track = player.list && player.list.audios ? player.list.audios[player.list.index] || {} : {};
+          try {
+            sessionStorage.setItem(stateKey, JSON.stringify({
+              index: player.list ? player.list.index : 0,
+              url: track.url || audio.currentSrc || audio.src || '',
+              time: Number.isFinite(audio.currentTime) ? audio.currentTime : 0,
+              volume: Number.isFinite(audio.volume) ? audio.volume : 0.7,
+              playing: !audio.paused && !audio.ended
+            }));
+          } catch (error) {}
+        }
 
-        target.prepend(shell);
+        function buildMetingMarkup(fixed) {
+          const apiAttr = customMusicApi ? ' api="' + customMusicApi + '"' : '';
+          return '<meting-js' + apiAttr + ' server="netease" type="playlist" id="13942358671" fixed="' + fixed + '" autoplay="false" order="random" preload="auto" volume="0.7"></meting-js>';
+        }
 
-        const giscusScript = document.createElement('script');
-        giscusScript.src = 'https://giscus.app/client.js';
-        giscusScript.setAttribute('data-repo', 'sheepO2/sheepO2.github.io');
-        giscusScript.setAttribute('data-repo-id', 'R_kgDORpKDVg');
-        giscusScript.setAttribute('data-category', 'General');
-        giscusScript.setAttribute('data-category-id', 'DIC_kwDORpKDVs4C41AR');
-        giscusScript.setAttribute('data-mapping', 'pathname');
-        giscusScript.setAttribute('data-theme', 'preferred_color_scheme');
-        giscusScript.setAttribute('data-lang', 'zh-CN');
-        giscusScript.crossOrigin = 'anonymous';
-        giscusScript.async = true;
-        document.getElementById('giscus-container').appendChild(giscusScript);
+        function mountPlayer() {
+          let wrap;
+          if (isMusicPage) {
+            const target = [document.querySelector('.markdown-body'), document.querySelector('.post'), document.querySelector('.article'), document.querySelector('#board')].find(Boolean);
+            if (!target || document.getElementById('music-page-shell')) return;
+            const shell = document.createElement('section');
+            shell.id = 'music-page-shell';
+            shell.style.margin = '20px 0';
+            shell.innerHTML = '<div id="music-player-wrap"><div id="music-player-placeholder">Loading music player...</div></div><div id="giscus-container" style="margin-top:30px;"></div>';
+            target.prepend(shell);
+            wrap = shell.querySelector('#music-player-wrap');
+            mountComments(shell.querySelector('#giscus-container'));
+          } else {
+            wrap = document.createElement('div');
+            wrap.id = 'background-music-player';
+            wrap.setAttribute('aria-label', 'Background music player');
+            document.body.appendChild(wrap);
+          }
+          wrap.innerHTML = buildMetingMarkup(isMusicPage ? 'false' : 'true');
+          waitForPlayer(wrap, 0);
+        }
 
-        initMusicPlayer(customMusicApi);
+        function mountComments(container) {
+          if (!container) return;
+          const script = document.createElement('script');
+          script.src = 'https://giscus.app/client.js';
+          script.setAttribute('data-repo', 'sheepO2/sheepO2.github.io');
+          script.setAttribute('data-repo-id', 'R_kgDORpKDVg');
+          script.setAttribute('data-category', 'General');
+          script.setAttribute('data-category-id', 'DIC_kwDORpKDVs4C41AR');
+          script.setAttribute('data-mapping', 'pathname');
+          script.setAttribute('data-theme', 'preferred_color_scheme');
+          script.setAttribute('data-lang', 'zh-CN');
+          script.crossOrigin = 'anonymous';
+          script.async = true;
+          container.appendChild(script);
+        }
+
+        function waitForPlayer(wrap, attempts) {
+          const meting = wrap.querySelector('meting-js');
+          if (meting && meting.aplayer && meting.aplayer.audio) {
+            player = meting.aplayer;
+            bindPlayer();
+            restorePlayback();
+            return;
+          }
+          if (attempts < 100) window.setTimeout(function () { waitForPlayer(wrap, attempts + 1); }, 100);
+        }
+
+        function bindPlayer() {
+          player.audio.addEventListener('timeupdate', saveState);
+          player.audio.addEventListener('pause', saveState);
+          player.audio.addEventListener('play', saveState);
+          player.audio.addEventListener('ended', saveState);
+          player.audio.addEventListener('loadedmetadata', function () {
+            applyRestore();
+          }, { once: true });
+        }
+
+        function applyRestore() {
+          if (!restorePending || !restoreState) return;
+          if (restoreState.time > 0 && Number.isFinite(restoreState.time)) player.audio.currentTime = restoreState.time;
+          if (restoreState.playing && player.play) {
+            const playback = player.play();
+            if (playback && playback.catch) playback.catch(function () {});
+          }
+          restorePending = false;
+        }
+
+        function restorePlayback() {
+          if (!restoreState) return;
+          player.volume(restoreState.volume || 0.7, true);
+          const tracks = player.list && player.list.audios ? player.list.audios : [];
+          const byUrl = tracks.findIndex(function (track) { return track.url && track.url === restoreState.url; });
+          const index = byUrl >= 0 ? byUrl : restoreState.index;
+          if (Number.isInteger(index) && index >= 0 && index < tracks.length && player.list) player.list.switch(index);
+          else restorePending = false;
+          if (player.audio.readyState >= 1) applyRestore();
+        }
+
+        window.addEventListener('pagehide', saveState);
+        window.addEventListener('beforeunload', saveState);
+        document.addEventListener('visibilitychange', function () {
+          if (document.visibilityState === 'hidden') saveState();
+        });
+        mountPlayer();
       });
-
-      function buildMetingMarkup(api) {
-        const apiAttr = api ? ' api="' + api + '"' : '';
-        return `
-          <meting-js${apiAttr}
-            server="netease"
-            type="playlist"
-            id="13942358671"
-            fixed="false"
-            autoplay="false"
-            order="random"
-            preload="auto"
-            volume="0.7">
-          </meting-js>
-        `;
-      }
-
-      function renderMetingPlayer(api) {
-        const wrap = document.getElementById('music-player-wrap');
-        if (!wrap) return;
-        wrap.innerHTML = buildMetingMarkup(api);
-      }
-
-      async function initMusicPlayer(customApi) {
-        renderMetingPlayer(customApi || '');
-      }
     </script>
   
     <div id="cursor"></div>

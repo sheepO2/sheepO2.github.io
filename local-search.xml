@@ -27,7 +27,7 @@
     <link href="/2026/04/22/%E5%8D%9A%E5%AE%A2%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97/"/>
     <url>/2026/04/22/%E5%8D%9A%E5%AE%A2%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97/</url>
     
-    <content type="html"><![CDATA[<p><em><strong><span class="highlight">2026.4.22 修复了音乐界面播放器503的问题</spanS></strong></em></p><p><em><strong><span class="highlight">2026.9.6 修复了音乐界面播放器无法加载的问题（必须使用魔法才会显示），增加了新分类，修改了浏览器图标</spanS></strong></em></p><p><em><strong><span class="highlight">2026.10.23 增加了过渡到博客首页的加载动画</spanS></strong></em></p><p><em><strong><span class="highlight">2026.10.30 修改了音乐可视化的动画，替换了旧版读取Umami数据统计解决了不兼容问题，数据统计问题具体解决方法请看搭建过程那篇</spanS></strong></em></p>]]></content>
+    <content type="html"><![CDATA[<p><em><strong><span class="highlight">2026.4.22 修复了音乐界面播放器503的问题</spanS></strong></em></p><p><em><strong><span class="highlight">2026.9.6 修复了音乐界面播放器无法加载的问题（必须使用魔法才会显示），增加了新分类，修改了浏览器图标</spanS></strong></em></p><p><em><strong><span class="highlight">2026.10.23 增加了过渡到博客首页的加载动画</spanS></strong></em></p><p><em><strong><span class="highlight">2026.10.30 修改了音乐可视化的动画，替换了旧版读取Umami数据统计解决了不兼容问题，数据统计问题具体解决方法请看搭建过程那篇，增加了在博客范围内后台悬浮音乐播放器的功能，切换到其他页面时会有一定缓冲时间才会加载，如果需要暂停可以在左下角位置暂停</spanS></strong></em></p>]]></content>
     
     
     <categories>
