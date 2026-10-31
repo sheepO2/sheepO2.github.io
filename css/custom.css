@@ -4,26 +4,44 @@ body {
 
 #cursor {
   position: fixed;
-  width: 10px;
-  height: 10px;
-  background: rgba(25, 65, 174, 0.8);
-  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  /* 描边手术刀：刀尖与真实鼠标位置对齐，延展方向为右下。 */
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none'%3E%3Cpath d='M4 6 24 10 31 17 17 30 9 23Z' fill='%23fff' stroke='%231730d7' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M17 30 31 17 55 41c3 3 3 7 0 10s-7 3-10 0L21 27' fill='%23fdfdff' stroke='%231730d7' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='m38 24 7 7M33 29l7 7' stroke='%231730d7' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='52' cy='48' r='2.2' fill='%23fff' stroke='%231730d7' stroke-width='1.7'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px rgba(44, 51, 69, 0.5);
+  transform: translate(-4px, -5px);
+  filter: drop-shadow(0 2px 4px rgba(23, 48, 215, 0.24));
+  transition: opacity .16s ease;
 }
 
 #cursor-trail {
   position: fixed;
-  width: 20px;
-  height: 20px;
-  border: 1px solid rgba(105, 152, 161, 0.763);
-  border-radius: 50%;
+  inset: 0;
   pointer-events: none;
   z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: all 0.15s ease;
+  /* 从手术刀手柄的尾端继续向右下方延伸。 */
+}
+
+.cursor-trail__step {
+  position: fixed;
+  width: 13px;
+  height: 8px;
+  border: 1.5px solid #1730d7;
+  border-radius: 70% 35% 70% 35%;
+  background: rgba(253, 253, 255, .9);
+  box-shadow: 0 0 5px rgba(23, 48, 215, .22);
+  transform: translate(-50%, -50%) rotate(var(--trail-angle));
+  animation: cursor-footprint .9s ease-out forwards;
+}
+
+@keyframes cursor-footprint {
+  0% { opacity: .92; scale: 1; }
+  100% { opacity: 0; scale: .5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-trail__step { animation-duration: .15s; }
 }
 
 *,
@@ -402,6 +420,17 @@ body.fancybox-active .fancybox-navigation button {
 body.fancybox-active #cursor,
 body.fancybox-active #cursor-trail {
   display: none !important;
+}
+
+/* giscus 在跨域 iframe 中运行；进入其区域时恢复浏览器原生光标。 */
+body.giscus-cursor-active,
+body.giscus-cursor-active * {
+  cursor: auto !important;
+}
+
+body.giscus-cursor-active #cursor,
+body.giscus-cursor-active #cursor-trail {
+  opacity: 0 !important;
 }
 
 .unity-album__page figcaption {
