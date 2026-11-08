@@ -7,6 +7,12 @@ window.addEventListener('DOMContentLoaded', function() {
   var shell = null;
   var pointCount = 36;
   var waveform = null;
+  var particleCanvas = null;
+  var particleContext = null;
+  var particles = [];
+  var particleSpawnCarry = 0;
+  var particleWidth = 0;
+  var particleHeight = 0;
   var renderedOffsets = [];
   var statusNode = null;
   var audioContext = null;
@@ -60,6 +66,7 @@ window.addEventListener('DOMContentLoaded', function() {
       '  <span class="music-footer-visualizer__status" id="music-footer-visualizer-status">Waiting for player...</span>',
       '</div>',
       '<div class="music-footer-visualizer__body">',
+      '  <canvas class="music-footer-visualizer__particles" aria-hidden="true"></canvas>',
       '  <svg class="music-footer-visualizer__waveform" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">',
       '    <polyline id="music-footer-spectrum" points="0,50 100,50"></polyline>',
       '  </svg>',
@@ -71,8 +78,69 @@ window.addEventListener('DOMContentLoaded', function() {
 
     statusNode = shell.querySelector('#music-footer-visualizer-status');
     waveform = shell.querySelector('#music-footer-spectrum');
+    particleCanvas = shell.querySelector('.music-footer-visualizer__particles');
+    particleContext = particleCanvas ? particleCanvas.getContext('2d') : null;
+    resizeParticleCanvas();
+    window.addEventListener('resize', resizeParticleCanvas, { passive: true });
 
     return true;
+  }
+
+  function resizeParticleCanvas() {
+    if (!particleCanvas || !particleContext) return;
+    var bounds = particleCanvas.getBoundingClientRect();
+    var pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    particleWidth = Math.max(1, Math.round(bounds.width));
+    particleHeight = Math.max(1, Math.round(bounds.height));
+    particleCanvas.width = Math.round(particleWidth * pixelRatio);
+    particleCanvas.height = Math.round(particleHeight * pixelRatio);
+    particleContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  }
+
+  function renderParticles(values, maxValue, averageEnergy) {
+    if (!particleContext || !particleCanvas) return;
+    if (!particleWidth || !particleHeight) resizeParticleCanvas();
+    particleContext.clearRect(0, 0, particleWidth, particleHeight);
+
+    // Around 0.1 mm on a standard-density screen: visible on close viewing,
+    // but still a blue-white glint rather than visible confetti.
+    var intensity = Math.max(0, Math.min(1, averageEnergy || 0));
+    var spawnRate = intensity * intensity * 2.1;
+    particleSpawnCarry += spawnRate;
+    while (particleSpawnCarry >= 1 && particles.length < 70) {
+      particleSpawnCarry -= 1;
+      var band = Math.floor(Math.random() * values.length);
+      var bandEnergy = Math.min(1, (values[band] || 0) / Math.max(maxValue, 1));
+      if (Math.random() > 0.15 + bandEnergy * 0.85) continue;
+      particles.push({
+        x: ((band + Math.random()) / values.length) * particleWidth,
+        y: particleHeight * (0.48 + Math.random() * 0.16),
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: -(0.22 + bandEnergy * 0.72),
+        life: 20 + Math.random() * 24,
+        maxLife: 44,
+        size: 1.2 + Math.random() * 2,
+        blue: Math.random() > 0.46
+      });
+    }
+
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var particle = particles[i];
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      particle.life -= 1;
+      if (particle.life <= 0 || particle.y < -3) {
+        particles.splice(i, 1);
+        continue;
+      }
+      var fade = Math.min(1, particle.life / 10) * Math.min(1, (particle.maxLife - particle.life) / 8);
+      particleContext.beginPath();
+      particleContext.fillStyle = particle.blue
+        ? 'rgba(112, 185, 255, ' + (0.16 + fade * 0.36).toFixed(3) + ')'
+        : 'rgba(220, 239, 255, ' + (0.18 + fade * 0.34).toFixed(3) + ')';
+      particleContext.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+      particleContext.fill();
+    }
   }
 
   function setStatus(text) {
@@ -138,6 +206,7 @@ window.addEventListener('DOMContentLoaded', function() {
     waveform.style.opacity = (0.58 + Math.min(0.42, averageEnergy * 0.8)).toFixed(3);
     waveform.style.filter = averageEnergy > 0.48 ? 'brightness(1.18)' : 'none';
     if (shell) shell.style.setProperty('--music-energy', Math.min(1, averageEnergy).toFixed(3));
+    renderParticles(values, maxValue, averageEnergy);
   }
 
   function resetWaveform() {
@@ -147,6 +216,9 @@ window.addEventListener('DOMContentLoaded', function() {
     waveform.style.opacity = '0.42';
     waveform.style.filter = 'none';
     if (shell) shell.style.setProperty('--music-energy', '0');
+    particles = [];
+    particleSpawnCarry = 0;
+    if (particleContext) particleContext.clearRect(0, 0, particleWidth, particleHeight);
   }
 
   function stopFallback() {
