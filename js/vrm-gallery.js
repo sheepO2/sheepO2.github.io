@@ -9,6 +9,7 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
 
   const viewer = gallery.querySelector('[data-vrm-viewer]');
   const status = gallery.querySelector('[data-vrm-status]');
+  const hint = viewer.querySelector('.vrm-viewer__hint');
   const title = gallery.querySelector('[data-vrm-title]');
   const description = gallery.querySelector('[data-vrm-description]');
   const author = gallery.querySelector('[data-vrm-author]');
@@ -28,9 +29,11 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
   const controls = new OrbitControls(camera, canvas);
   controls.target.set(0, 1.05, 0);
   controls.enableDamping = true;
-  controls.minDistance = 1.25;
-  controls.maxDistance = 5;
-  controls.maxPolarAngle = Math.PI * 0.52;
+  // 不限制上下观察角度；放大后可绕模型完整查看。
+  controls.minPolarAngle = 0;
+  controls.maxPolarAngle = Math.PI;
+  controls.enablePan = true;
+  controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE;
 
   scene.add(new THREE.HemisphereLight(0xffffff, 0x34425b, 2.2));
   const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
@@ -47,6 +50,8 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
   loader.register((parser) => new VRMLoaderPlugin(parser));
   let activeVrm = null;
   let requestId = 0;
+  let autoRotate = true;
+  let lastFrameTime = performance.now();
 
   function resize() {
     const { width, height } = viewer.getBoundingClientRect();
@@ -55,12 +60,24 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
     camera.updateProjectionMatrix();
   }
 
-  function frame() {
+  function frame(now) {
     requestAnimationFrame(frame);
-    if (activeVrm) activeVrm.update(0.016);
+    const delta = Math.min((now - lastFrameTime) / 1000, 0.05);
+    lastFrameTime = now;
+    if (activeVrm) {
+      activeVrm.update(delta);
+      if (autoRotate) activeVrm.scene.rotation.y += delta * 0.12;
+    }
     controls.update();
     renderer.render(scene, camera);
   }
+
+  // 每次进入页面自动展示；用户点击或拖拽画布后，保持当前角度不再自动旋转。
+  canvas.addEventListener('pointerdown', () => {
+    if (!autoRotate) return;
+    autoRotate = false;
+    if (hint) hint.textContent = '已暂停自动旋转 · 拖拽旋转 · 滚轮缩放 · Shift+拖拽平移';
+  });
 
   function disposeModel() {
     if (!activeVrm) return;
@@ -76,6 +93,8 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
 
   function select(work, index) {
     const id = ++requestId;
+    autoRotate = true;
+    if (hint) hint.textContent = '拖拽旋转 · 滚轮缩放 · Shift+拖拽平移';
     works.forEach((item) => item.classList.toggle('is-active', item === work));
     title.textContent = work.dataset.title;
     description.textContent = work.dataset.description;
