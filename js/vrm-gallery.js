@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { VRMLoaderPlugin } from '@pixiv/three-vrm';
 
 document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
@@ -48,7 +49,10 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
 
   const loader = new GLTFLoader();
   loader.register((parser) => new VRMLoaderPlugin(parser));
+  const fbxLoader = new FBXLoader();
   let activeVrm = null;
+  let activeModel = null;
+  let activeMixer = null;
   let requestId = 0;
   let autoRotate = true;
   let lastFrameTime = performance.now();
@@ -68,6 +72,10 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
       activeVrm.update(delta);
       if (autoRotate) activeVrm.scene.rotation.y += delta * 0.12;
     }
+    if (activeModel) {
+      activeMixer?.update(delta);
+      if (autoRotate) activeModel.rotation.y += delta * 0.12;
+    }
     controls.update();
     renderer.render(scene, camera);
   }
@@ -80,15 +88,35 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
   });
 
   function disposeModel() {
-    if (!activeVrm) return;
-    scene.remove(activeVrm.scene);
-    activeVrm.scene.traverse((node) => {
+    const root = activeVrm?.scene || activeModel;
+    if (!root) return;
+    scene.remove(root);
+    root.traverse((node) => {
       if (node.isMesh) {
         node.geometry?.dispose();
         (Array.isArray(node.material) ? node.material : [node.material]).forEach((material) => material?.dispose());
       }
     });
     activeVrm = null;
+    activeModel = null;
+    activeMixer = null;
+  }
+
+  function prepareFbx(model) {
+    const bounds = new THREE.Box3().setFromObject(model);
+    const size = bounds.getSize(new THREE.Vector3());
+    const center = bounds.getCenter(new THREE.Vector3());
+    const largestSide = Math.max(size.x, size.y, size.z);
+    if (largestSide > 0) model.scale.multiplyScalar(2 / largestSide);
+    model.position.sub(center.multiply(model.scale));
+    const normalizedBounds = new THREE.Box3().setFromObject(model);
+    model.position.y -= normalizedBounds.min.y;
+    model.traverse((node) => {
+      if (node.isMesh) {
+        node.castShadow = true;
+        node.receiveShadow = true;
+      }
+    });
   }
 
   function select(work, index) {
@@ -99,10 +127,33 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
     title.textContent = work.dataset.title;
     description.textContent = work.dataset.description;
     author.textContent = work.dataset.author || '—';
-    version.textContent = work.dataset.version || 'VRM';
+    const format = (work.dataset.format || 'VRM').toUpperCase();
+    version.textContent = work.dataset.version || format;
     current.textContent = String(index + 1).padStart(2, '0');
     status.hidden = false;
     status.textContent = '正在载入作品…';
+
+    const onError = (error) => {
+      if (id !== requestId) return;
+      console.error(`${format} 加载失败：`, error);
+      status.textContent = `${format} 模型载入失败，请检查文件路径和引用的贴图文件。`;
+    };
+
+    if (format === 'FBX') {
+      fbxLoader.load(work.dataset.model, (model) => {
+        if (id !== requestId) return;
+        disposeModel();
+        prepareFbx(model);
+        activeModel = model;
+        if (model.animations.length) {
+          activeMixer = new THREE.AnimationMixer(model);
+          model.animations.forEach((clip) => activeMixer.clipAction(clip).play());
+        }
+        scene.add(model);
+        status.hidden = true;
+      }, undefined, onError);
+      return;
+    }
 
     loader.load(work.dataset.model, (gltf) => {
       if (id !== requestId) return;
@@ -113,11 +164,7 @@ document.querySelectorAll('[data-vrm-gallery]').forEach((gallery) => {
       activeVrm.scene.rotation.y = Math.PI;
       scene.add(activeVrm.scene);
       status.hidden = true;
-    }, undefined, (error) => {
-      if (id !== requestId) return;
-      console.error('VRM 加载失败：', error);
-      status.textContent = '模型载入失败，请检查文件路径与 VRM 格式。';
-    });
+    }, undefined, onError);
   }
 
   works.forEach((work, index) => work.addEventListener('click', () => select(work, index)));

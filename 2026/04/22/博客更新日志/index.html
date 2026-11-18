@@ -27,7 +27,7 @@
 <meta property="og:description" content="2026.4.22 修复了音乐界面播放器503的问题 2026.9.6 修复了音乐界面播放器无法加载的问题（必须使用魔法才会显示），增加了新分类，修改了浏览器图标 2026.10.23 增加了过渡到博客首页的加载动画 2026.10.30 修改了音乐可视化的动画，替换了旧版读取Umami数据统计解决了不兼容问题，数据统计问题具体解决方法请看搭建过程那篇，增加了在博客范围内后台悬浮音乐播放器的功能，">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-04-22T13:13:56.000Z">
-<meta property="article:modified_time" content="2026-11-10T12:51:58.812Z">
+<meta property="article:modified_time" content="2026-11-18T18:10:19.419Z">
 <meta property="article:author" content="sheepO2">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -505,7 +505,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          298 字
+          322 字
         
       </span>
     
@@ -576,6 +576,7 @@
 <p><em><strong><span class="highlight">2026.10.31 修改了博客指针样式</spanS></strong></em></p>
 <p><em><strong><span class="highlight">2026.11.7 新增blender建模练习展示界面</spanS></strong></em></p>
 <p><em><strong><span class="highlight">2026.11.10 增加了模型展示时会自动旋转</spanS></strong></em></p>
+<p><em><strong><span class="highlight">2026.11.19 支持fbx格式文件的模型查看</spanS></strong></em></p>
 
                 
               </div>
@@ -1147,6 +1148,17 @@
 
 
   
+      <script>
+        document.addEventListener('keydown', function (event) {
+          if (event.key !== 'Enter' && event.keyCode !== 13) return;
+          var passwordInput = document.getElementById('hbePass');
+          if (passwordInput) passwordInput.value = passwordInput.value.toLowerCase();
+        }, true);
+      </script>
+    
+    <div id="cursor"></div>
+    <div id="cursor-trail"></div>
+  
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         const stateKey = 'sheepo2-music-player-state-v1';
@@ -1270,17 +1282,6 @@
       });
     </script>
   
-    <div id="cursor"></div>
-    <div id="cursor-trail"></div>
-  
-      <script>
-        document.addEventListener('keydown', function (event) {
-          if (event.key !== 'Enter' && event.keyCode !== 13) return;
-          var passwordInput = document.getElementById('hbePass');
-          if (passwordInput) passwordInput.value = passwordInput.value.toLowerCase();
-        }, true);
-      </script>
-    
 
   <noscript>
     <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
