@@ -38,10 +38,50 @@
         return;
       }
 
+      if (direction < 0) {
+        lock = true;
+        // Animate the earlier page independently of its hidden `is-before`
+        // state, so it visibly lifts from the stack and covers the current
+        // page instead of jumping straight to the final position.
+        var coverAnimation = pages[target].animate([
+          {
+            transform: 'translate3d(-70%, -10%, 58px) rotate(-8deg) scale(1.03)',
+            opacity: 1,
+            filter: 'none',
+            boxShadow: '0 28px 48px rgba(32, 42, 52, 0.2)'
+          },
+          {
+            transform: 'translate3d(0, 0, 8px) rotate(0deg) scale(1)',
+            opacity: 1,
+            filter: 'none',
+            boxShadow: '0 18px 34px rgba(32, 42, 52, 0.18)'
+          }
+        ], {
+          duration: 620,
+          easing: 'cubic-bezier(0.18, 0.78, 0.2, 1)',
+          fill: 'both'
+        });
+        pages[target].style.zIndex = '38';
+
+        window.setTimeout(function () {
+          coverAnimation.cancel();
+          current = target;
+          pages.forEach(function (page) {
+            page.style.removeProperty('z-index');
+          });
+          render();
+        }, 620);
+
+        window.setTimeout(function () {
+          lock = false;
+        }, 820);
+        return;
+      }
+
       lock = true;
-      pages[current].classList.add(direction > 0 ? 'is-extracting-next' : 'is-extracting-prev');
-      pages[target].classList.add(direction > 0 ? 'is-entering-next' : 'is-entering-prev');
-      album.classList.add(direction > 0 ? 'is-extract-next' : 'is-extract-prev');
+      pages[current].classList.add('is-extracting-next');
+      pages[target].classList.add('is-entering-next');
+      album.classList.add('is-extract-next');
 
       window.setTimeout(function () {
         current = target;

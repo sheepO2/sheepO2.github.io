@@ -633,6 +633,25 @@ body.giscus-cursor-active #cursor-trail {
   filter: none;
 }
 
+/* The previous page slides over the current page when returning. */
+.unity-album__page.is-covering-prev-start {
+  z-index: 38;
+  opacity: 1;
+  pointer-events: none;
+  transform: translate3d(-70%, -10%, 58px) rotate(-8deg) scale(1.03);
+  filter: none;
+  box-shadow: 0 28px 48px rgba(32, 42, 52, 0.2);
+}
+
+.unity-album__page.is-covering-prev {
+  z-index: 38;
+  opacity: 1;
+  pointer-events: none;
+  transform: translate3d(0, 0, 8px) rotate(0deg) scale(1);
+  filter: none;
+  box-shadow: 0 18px 34px rgba(32, 42, 52, 0.18);
+}
+
 .unity-album__turn::after {
   opacity: 0.28;
 }
